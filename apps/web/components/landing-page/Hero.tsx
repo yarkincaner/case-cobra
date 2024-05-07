@@ -1,9 +1,6 @@
-'use client'
-
 import Icons from '@/components/ui/icons'
 import Typography from '@/components/ui/typography'
 import Phone from '@/components/Phone'
-import { useTheme } from 'next-themes'
 
 const prosItems = [
   {
@@ -41,7 +38,6 @@ const users = [
 ]
 
 const Hero = () => {
-  const { theme } = useTheme()
   return (
     <>
       <div className='col-span-2 px-6 lg:px-0 lg:pt-4'>
@@ -113,11 +109,7 @@ const Hero = () => {
             src='/line.png'
             className='absolute -bottom-6 -left-6 w-20 select-none'
           />
-          <Phone
-            className='w-64'
-            imgSrc='/testimonials/1.jpg'
-            dark={theme === 'dark'}
-          />
+          <Phone className='w-64' imgSrc='/testimonials/1.jpg' />
         </div>
       </div>
     </>
