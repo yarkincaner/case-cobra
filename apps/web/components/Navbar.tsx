@@ -60,7 +60,7 @@ const Navbar: FC<Props> = ({}) => {
                 Sign up
               </Link>
               <Link
-                href={'/api/auth/login'}
+                href={'/sign-in'}
                 className={buttonVariants({
                   size: 'sm',
                   variant: 'ghost'

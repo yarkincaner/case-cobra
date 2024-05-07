@@ -13,9 +13,11 @@ export const metadata: Metadata = {
 }
 
 export default function RootLayout({
-  children
+  children,
+  authModal
 }: Readonly<{
   children: React.ReactNode
+  authModal: React.ReactNode
 }>) {
   return (
     <html lang='en'>
@@ -27,6 +29,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Navbar />
+          {authModal}
           {children}
         </ThemeProvider>
       </body>
