@@ -19,17 +19,18 @@ const Navbar: FC<Props> = ({}) => {
           {user ? (
             <>
               <Link
-                href={'/api/auth/logout'}
+                href={'/logout'}
                 className={buttonVariants({
                   size: 'sm',
                   variant: 'ghost'
                 })}
+                scroll={false}
               >
                 Sign out
               </Link>
               {isAdmin ? (
                 <Link
-                  href={'/api/auth/logout'}
+                  href={'/dashboard'}
                   className={buttonVariants({
                     size: 'sm',
                     variant: 'ghost'
@@ -51,11 +52,12 @@ const Navbar: FC<Props> = ({}) => {
           ) : (
             <>
               <Link
-                href={'/api/auth/register'}
+                href={'/sign-up'}
                 className={buttonVariants({
                   size: 'sm',
                   variant: 'ghost'
                 })}
+                scroll={false}
               >
                 Sign up
               </Link>
@@ -65,6 +67,7 @@ const Navbar: FC<Props> = ({}) => {
                   size: 'sm',
                   variant: 'ghost'
                 })}
+                scroll={false}
               >
                 Login
               </Link>
