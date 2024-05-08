@@ -1,13 +1,6 @@
 'use client'
 
-import {
-  CSSProperties,
-  FC,
-  HTMLAttributes,
-  useEffect,
-  useRef,
-  useState
-} from 'react'
+import { HTMLAttributes, useEffect, useRef, useState } from 'react'
 import MaxWidthWrapper from '@/components/MaxWidthWrapper'
 import { useInView } from 'framer-motion'
 import { cn, splitArray } from '@/lib/utils'
@@ -81,7 +74,7 @@ function Review({ imgSrc, className, ...props }: ReviewProps) {
   return (
     <div
       className={cn(
-        'animate-fade-in rounded-[2.25rem] bg-white p-6 opacity-0 shadow-xl shadow-slate-900/5 dark:bg-slate-800',
+        'animate-fade-in rounded-[2.25rem] bg-secondary p-6 opacity-0 shadow-xl shadow-slate-900/5',
         className
       )}
       style={{ animationDelay }}
@@ -141,8 +134,8 @@ function ReviewGrid() {
           />
         </>
       ) : null}
-      <div className='pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-secondary' />
-      <div className='pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-secondary' />
+      <div className='pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-background' />
+      <div className='pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-background' />
     </div>
   )
 }

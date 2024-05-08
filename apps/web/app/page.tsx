@@ -1,4 +1,5 @@
 import MaxWidthWrapper from '@/components/MaxWidthWrapper'
+import CreateYourCase from '@/components/landing-page/CreateYourCase'
 import Hero from '@/components/landing-page/Hero'
 import { Reviews } from '@/components/landing-page/Reviews'
 import Testimonials from '@/components/landing-page/Testimonials'
@@ -20,6 +21,12 @@ export default function Home() {
         <div className='pt-16'>
           <Reviews />
         </div>
+      </section>
+
+      <section>
+        <MaxWidthWrapper className='py-24'>
+          <CreateYourCase />
+        </MaxWidthWrapper>
       </section>
     </div>
   )

@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import Icons from '../ui/icons'
+import Icons from '@/components/ui/icons'
 
 type Props = {}
 
