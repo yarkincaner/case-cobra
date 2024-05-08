@@ -4,6 +4,7 @@ import '@/styles/globals.css'
 import Navbar from '@/components/Navbar'
 import { ThemeProvider } from '@/components/theme/theme-provider'
 import { Toaster } from '@/components/ui/sonner'
+import Footer from '@/components/Footer'
 
 const inter = Inter({ subsets: ['latin'] })
 const recursive = Recursive({ subsets: ['latin'] })
@@ -32,6 +33,7 @@ export default function RootLayout({
           <Navbar />
           {authModal}
           {children}
+          <Footer />
           <Toaster richColors />
         </ThemeProvider>
       </body>

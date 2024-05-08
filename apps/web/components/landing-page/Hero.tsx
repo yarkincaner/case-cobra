@@ -87,7 +87,7 @@ const Hero = () => {
               <div className='flex gap-0.5'>
                 {[...Array(5)].map((_, index) => (
                   <Icons.star
-                    className='size-4 fill-primary text-primary'
+                    className='size-5 fill-primary text-primary'
                     key={index}
                   />
                 ))}
