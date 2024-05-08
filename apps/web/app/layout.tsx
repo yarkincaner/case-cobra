@@ -32,8 +32,10 @@ export default function RootLayout({
         >
           <Navbar />
           {authModal}
-          {children}
-          <Footer />
+          <main className='flex min-h-[calc(100vh-3.5rem-1px)] flex-col'>
+            <div className='flex h-full flex-1 flex-col'>{children}</div>
+            <Footer />
+          </main>
           <Toaster richColors />
         </ThemeProvider>
       </body>
