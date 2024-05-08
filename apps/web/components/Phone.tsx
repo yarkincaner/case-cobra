@@ -10,18 +10,19 @@ const Phone: FC<Props> = ({ className, imgSrc, dark = false, ...props }) => {
   return (
     <div
       className={cn(
-        'pointer-events-none relative z-50 overflow-hidden',
+        'pointer-events-none relative z-40 overflow-hidden',
         className
       )}
       {...props}
     >
       <img
-        src={
-          dark
-            ? '/phone-template-dark-edges.png'
-            : '/phone-template-white-edges.png'
-        }
-        className='pointer-events-none z-50 select-none'
+        src={'/phone-template-white-edges.png'}
+        className='pointer-events-none z-40 select-none dark:hidden'
+        alt='phone image'
+      />
+      <img
+        src={'/phone-template-dark-edges.png'}
+        className='pointer-events-none z-40 hidden select-none dark:block'
         alt='phone image'
       />
       <div className='absolute inset-0 -z-10'>
