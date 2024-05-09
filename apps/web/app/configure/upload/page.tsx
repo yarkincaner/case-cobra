@@ -2,21 +2,73 @@
 
 import Icons from '@/components/ui/icons'
 import { Progress } from '@/components/ui/progress'
+import { createClient } from '@/lib/db/client'
 import { cn } from '@/lib/utils'
+import { useRouter } from 'next/navigation'
 import { FC, useState, useTransition } from 'react'
-import Dropzone, { FileRejection } from 'react-dropzone'
+import Dropzone, { DropEvent, FileRejection } from 'react-dropzone'
+import { toast } from 'sonner'
 
 type Props = {}
 
 const Page: FC<Props> = ({}) => {
+  const db = createClient()
+  const router = useRouter()
   const [isDragOver, setIsDragOver] = useState<boolean>(false)
   const [uploadProgress, setUploadProgress] = useState<number>(0)
+  const [isUploading, setIsUploading] = useState<boolean>(false)
 
-  const onDropRejected = () => {}
+  const uploadImage = async (image: File) => {
+    const { data: userData, error: userError } = await db.auth.getUser()
 
-  const onDropAccepted = () => {}
+    if (userError) {
+      setUploadProgress(0)
+      setIsUploading(false)
+      return router.replace('/sign-in')
+    }
+    setUploadProgress(50)
 
-  const isUploading = false
+    if (!userData.user) {
+      setUploadProgress(0)
+      setIsUploading(false)
+      return router.replace('/sign-in')
+    }
+
+    const { data, error } = await db.storage
+      .from('case-photos')
+      .upload(`${userData.user.id}/${image.name}`, image)
+
+    setUploadProgress(75)
+    if (error) {
+      setUploadProgress(0)
+      setIsUploading(false)
+      return toast.error('Something went wrong!', {
+        description: error.message
+      })
+    }
+    setUploadProgress(100)
+    setIsUploading(false)
+    startTransition(() => {
+      router.push(`/configure/design?path=${data?.path}`)
+    })
+  }
+
+  const onDropRejected = (rejectedFiles: FileRejection[]) => {
+    const [file] = rejectedFiles
+    setIsDragOver(false)
+    toast.error(`${file.file.type} type is not supported.`, {
+      description: 'Please choose a PNG, JPG, OR JPEG image instead.'
+    })
+  }
+
+  const onDropAccepted = async (acceptedFiles: File[], event: DropEvent) => {
+    setIsDragOver(false)
+    setIsUploading(true)
+    setUploadProgress(25)
+    const image = acceptedFiles[0]
+    await uploadImage(image)
+  }
+
   const [isPending, startTransition] = useTransition()
 
   return (
@@ -32,7 +84,7 @@ const Page: FC<Props> = ({}) => {
       <div className='relative flex w-full flex-1 flex-col items-center justify-center'>
         <Dropzone
           onDropRejected={onDropRejected}
-          onDropAccepted={onDropAccepted}
+          onDropAccepted={(files, e) => onDropAccepted(files, e)}
           accept={{
             'image/png': ['.png'],
             'image/jpeg': ['.jpeg'],

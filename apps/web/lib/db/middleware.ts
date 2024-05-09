@@ -2,11 +2,13 @@ import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { type NextRequest, NextResponse } from 'next/server'
 
 export const updateSession = async (request: NextRequest) => {
-  if (typeof process.env.SUPABASE_URL === 'undefined') {
-    throw new Error('Environment variable SUPABASE_URL is missing!')
+  if (typeof process.env.NEXT_PUBLIC_SUPABASE_URL === 'undefined') {
+    throw new Error('Environment variable NEXT_PUBLIC_SUPABASE_URL is missing!')
   }
-  if (typeof process.env.SUPABASE_ANON_KEY === 'undefined') {
-    throw new Error('Environment variable SUPABASE_ANON_KEY is missing!')
+  if (typeof process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY === 'undefined') {
+    throw new Error(
+      'Environment variable NEXT_PUBLIC_SUPABASE_ANON_KEY is missing!'
+    )
   }
 
   // Create an unmodified response
@@ -17,8 +19,8 @@ export const updateSession = async (request: NextRequest) => {
   })
 
   const supabase = createServerClient(
-    process.env.SUPABASE_URL,
-    process.env.SUPABASE_ANON_KEY,
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     {
       cookies: {
         get(name: string) {
