@@ -74,7 +74,7 @@ const Page: FC<Props> = ({}) => {
   return (
     <div
       className={cn(
-        'relative my-16 flex h-full w-full flex-1 flex-col items-center justify-center rounded-xl bg-secondary p-2 ring-1 ring-inset ring-secondary lg:rounded-2xl',
+        'relative my-12 flex h-full w-full flex-1 flex-col items-center justify-center rounded-xl bg-secondary p-2 ring-1 ring-inset ring-secondary lg:rounded-2xl',
         {
           'bg-blue-900/10 ring-blue-900/25 dark:bg-blue-900/90 dark:ring-blue-900/75':
             isDragOver
