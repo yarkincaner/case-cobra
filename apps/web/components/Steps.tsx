@@ -13,7 +13,7 @@ const STEPS = [
   {
     name: 'Step 2: Customize design',
     description: 'Make the case yours',
-    url: '/desgin'
+    url: '/design'
   },
   {
     name: 'Step 3: Summary',

@@ -1,54 +1,85 @@
 import { createClient } from '@/lib/db/server'
-import { redirect } from 'next/navigation'
+import { notFound } from 'next/navigation'
 import { FC } from 'react'
-import sharp from 'sharp'
-import { toast } from 'sonner'
+import DesignConfigurator from './design-configurator'
 
 type Props = {
-  searchParams?: {
-    path?: string
+  searchParams: {
+    [key: string]: string | string[] | undefined
   }
 }
 
 const Page: FC<Props> = async ({ searchParams }) => {
-  if (typeof searchParams?.path === 'undefined') {
-    toast.error('Image path not found!', {
-      description: 'Redirecting to upload page'
-    })
-    return redirect('/configure/upload')
+  const { image, width, height } = searchParams
+  if (!image || typeof image !== 'string') {
+    return notFound()
   }
 
   const db = createClient()
-  const { data, error } = await db.storage
-    .from('case-photos')
-    .download(searchParams.path)
 
-  if (error) {
-    return <div>Download error: {error.message}</div>
-  }
+  const {
+    data: { publicUrl }
+  } = await db.storage.from('case-photos').getPublicUrl(image)
 
-  if (data === null) {
-    return <div>Data is null</div>
-  }
-
-  const buffer = await data?.arrayBuffer()
-  const imgMetadata = await sharp(buffer).metadata()
-  const { width, height } = imgMetadata
-
-  const { data: insertedData, error: insertError } = await db
-    .from('configuration')
-    .insert([
-      {
-        imageUrl: searchParams.path,
-        height: height || 500,
-        width: width || 500
-      }
-    ])
-
-  if (insertError) {
-    return <div>Insert Error: {insertError.message}</div>
-  }
-  return <div>Page</div>
+  return (
+    <DesignConfigurator
+      imageUrl={publicUrl}
+      imageDimensions={{
+        height: Number(height) || 500,
+        width: Number(width) || 500
+      }}
+    />
+  )
 }
+
+// const Page: FC<Props> = async ({ searchParams }) => {
+//   const { path } = searchParams
+//   if (!path || typeof path !== 'string') {
+//     return notFound()
+//   }
+
+//   const db = createClient()
+//   const { data, error } = await db.storage.from('case-photos').download(path)
+
+//   if (error) {
+//     return <div>Download error: {error.message}</div>
+//   }
+
+//   if (data === null) {
+//     return <div>Data is null</div>
+//   }
+//   const {
+//     data: { publicUrl }
+//   } = await db.storage.from('case-photos').getPublicUrl(path)
+
+//   const buffer = await data.arrayBuffer()
+//   const imgMetadata = await sharp(buffer).metadata()
+//   const { width, height } = imgMetadata
+
+//   const { data: insertedData, error: insertError } = await db
+//     .from('configuration')
+//     .insert([
+//       {
+//         imageUrl: publicUrl,
+//         height: height || 500,
+//         width: width || 500
+//       }
+//     ])
+//     .select()
+
+//   if (insertError) {
+//     return <div>Insert Error: {insertError.message}</div>
+//   }
+
+//   return (
+//     <DesignConfigurator
+//       imageUrl={publicUrl}
+//       imageDimensions={{
+//         height: insertedData[0].height,
+//         width: insertedData[0].width
+//       }}
+//     />
+//   )
+// }
 
 export default Page

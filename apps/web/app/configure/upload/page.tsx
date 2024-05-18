@@ -26,19 +26,23 @@ const Page: FC<Props> = ({}) => {
       setIsUploading(false)
       return router.replace('/sign-in')
     }
-    setUploadProgress(50)
+    setUploadProgress(20)
 
     if (!userData.user) {
       setUploadProgress(0)
       setIsUploading(false)
       return router.replace('/sign-in')
     }
+    setUploadProgress(40)
 
     const { data, error } = await db.storage
       .from('case-photos')
-      .upload(`${userData.user.id}/${image.name}`, image)
+      .upload(`${userData.user.id}/${image.name}`, image, {
+        upsert: true
+      })
 
-    setUploadProgress(75)
+    setUploadProgress(60)
+
     if (error) {
       setUploadProgress(0)
       setIsUploading(false)
@@ -46,10 +50,23 @@ const Page: FC<Props> = ({}) => {
         description: error.message
       })
     }
+    setUploadProgress(80)
+
+    const {
+      data: { publicUrl }
+    } = await db.storage.from('case-photos').getPublicUrl(data.path)
     setUploadProgress(100)
-    setIsUploading(false)
+
+    const url = new URL(`${origin}/configure/design`)
+    const searchParams = new URLSearchParams()
+    searchParams.set('image', data.path)
+    searchParams.set('width', '500')
+    searchParams.set('height', '500')
+
+    url.search = searchParams.toString()
+
     startTransition(() => {
-      router.push(`/configure/design?path=${data?.path}`)
+      router.push(url.toString())
     })
   }
 
