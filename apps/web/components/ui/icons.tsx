@@ -2,6 +2,7 @@ import {
   ArrowLeft,
   ArrowRight,
   Check,
+  ChevronsUpDown,
   Image,
   LayoutDashboard,
   Loader2,
@@ -27,6 +28,7 @@ const Icons = {
   loader: Loader2,
   image: Image,
   mousePointerSquareDashed: MousePointerSquareDashed,
+  upDown: ChevronsUpDown,
   google: (props: LucideProps) => (
     <svg {...props} viewBox='0 0 24 24'>
       <path
