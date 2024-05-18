@@ -1,9 +1,11 @@
 'use client'
 
+import HandleComponent from '@/components/HandleComponent'
 import { AspectRatio } from '@/components/ui/aspect-ratio'
 import { cn } from '@/lib/utils'
 import Image from 'next/image'
 import { FC } from 'react'
+import { Rnd } from 'react-rnd'
 
 type Props = {
   imageUrl: string
@@ -38,14 +40,31 @@ const DesignConfigurator: FC<Props> = ({ imageUrl, imageDimensions }) => {
             )}
           />
         </div>
-        <div className='relative size-full'>
-          <Image
-            src={imageUrl}
-            fill
-            alt='your image'
-            className='pointer-events-none'
-          />
-        </div>
+        <Rnd
+          default={{
+            x: 150,
+            y: 205,
+            height: imageDimensions.height / 4,
+            width: imageDimensions.width / 4
+          }}
+          className='absolute z-20 border-[3px] border-primary'
+          lockAspectRatio
+          resizeHandleComponent={{
+            bottomRight: <HandleComponent />,
+            bottomLeft: <HandleComponent />,
+            topRight: <HandleComponent />,
+            topLeft: <HandleComponent />
+          }}
+        >
+          <div className='relative size-full'>
+            <Image
+              src={imageUrl}
+              fill
+              alt='your image'
+              className='pointer-events-none'
+            />
+          </div>
+        </Rnd>
       </div>
     </div>
   )
