@@ -27,7 +27,7 @@ import {
 } from '@/lib/validators/option-validator'
 import { RadioGroup } from '@headlessui/react'
 import NextImage from 'next/image'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { FC, useRef, useState } from 'react'
 import { Rnd } from 'react-rnd'
 import { toast } from 'sonner'
@@ -46,14 +46,17 @@ type Props = {
     height: number
   }
   imageName: string
+  configId: number
 }
 
 const DesignConfigurator: FC<Props> = ({
   imageUrl,
   imageDimensions,
-  imageName
+  imageName,
+  configId
 }) => {
-  const searchParams = useSearchParams()
+  const router = useRouter()
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const [options, setOptions] = useState<OptionsType>({
     color: COLORS[0],
     model: MODELS.options[0],
@@ -74,6 +77,7 @@ const DesignConfigurator: FC<Props> = ({
   const containerRef = useRef<HTMLDivElement>(null)
 
   async function saveConfiguration() {
+    setIsLoading(true)
     try {
       const {
         left: caseLeft,
@@ -120,6 +124,7 @@ const DesignConfigurator: FC<Props> = ({
       const { data: user, error: authError } = await db.auth.getUser()
 
       if (authError) {
+        setIsLoading(false)
         // TODO: show sign-in page
         throw new Error(authError.message)
       }
@@ -130,22 +135,42 @@ const DesignConfigurator: FC<Props> = ({
           upsert: true
         })
       if (error) {
-        throw new Error(error.message)
+        setIsLoading(false)
+        return toast.error('Something went wrong!', {
+          description: error.message
+        })
       }
 
       const {
         data: { publicUrl }
       } = await db.storage.from('case-photos').getPublicUrl(data.path)
 
-      const { error: dbError } = await db
+      const { data: updateData, error: updateError } = await db
         .from('configuration')
         .update({
+          color: options.color.value,
+          finish: options.finish.value,
+          material: options.material.value,
+          model: options.model.value,
           croppedImageUrl: publicUrl
         })
-        .eq('imageUrl', imageUrl)
-      if (dbError) {
-        throw new Error(dbError.message)
+        .eq('id', configId)
+
+      if (updateError) {
+        setIsLoading(false)
+        return toast.error('Something went wrong!', {
+          description: updateError.message
+        })
       }
+
+      const url = new URL(`${origin}/configure/preview`)
+
+      const searchParams = new URLSearchParams()
+      searchParams.set('id', configId.toString())
+      url.search = searchParams.toString()
+
+      setIsLoading(false)
+      router.push(url.toString())
     } catch (err) {
       toast.error('Something went wrong!', {
         description: 'There was a problem saving your config, please try again.'
@@ -387,6 +412,9 @@ const DesignConfigurator: FC<Props> = ({
               <Button
                 size={'sm'}
                 className='w-full'
+                isLoading={isLoading}
+                disabled={isLoading}
+                loadingText='Saving'
                 onClick={() => saveConfiguration()}
               >
                 Continue <Icons.arrowRight className='ml-1.5 inline size-4' />

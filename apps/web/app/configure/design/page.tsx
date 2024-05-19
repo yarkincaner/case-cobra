@@ -38,6 +38,7 @@ const Page: FC<Props> = async ({ searchParams }) => {
         width: Number(width) || 500
       }}
       imageName={fileName}
+      configId={Number(configId)}
     />
   )
 }
