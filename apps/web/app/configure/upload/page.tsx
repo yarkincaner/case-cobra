@@ -26,14 +26,14 @@ const Page: FC<Props> = ({}) => {
       setIsUploading(false)
       return router.replace('/sign-in')
     }
-    setUploadProgress(20)
+    setUploadProgress(10)
 
     if (!userData.user) {
       setUploadProgress(0)
       setIsUploading(false)
       return router.replace('/sign-in')
     }
-    setUploadProgress(40)
+    setUploadProgress(20)
 
     const { data, error } = await db.storage
       .from('case-photos')
@@ -41,7 +41,7 @@ const Page: FC<Props> = ({}) => {
         upsert: true
       })
 
-    setUploadProgress(60)
+    setUploadProgress(40)
 
     if (error) {
       setUploadProgress(0)
@@ -50,20 +50,50 @@ const Page: FC<Props> = ({}) => {
         description: error.message
       })
     }
-    setUploadProgress(80)
+    setUploadProgress(60)
 
     const {
       data: { publicUrl }
     } = await db.storage.from('case-photos').getPublicUrl(data.path)
-    setUploadProgress(100)
+    setUploadProgress(80)
+
+    const { data: checkIfExist, error: checkIfExistError } = await db
+      .from('configuration')
+      .select('imageUrl')
+      .eq('imageUrl', publicUrl)
+
+    if (checkIfExistError) {
+      return toast.error('Something went wrong!', {
+        description: checkIfExistError.message
+      })
+    }
+
+    if (!checkIfExist) {
+      const { error: dbError } = await db.from('configuration').insert({
+        height: 500,
+        width: 500,
+        imageUrl: publicUrl
+      })
+      if (dbError) {
+        setUploadProgress(0)
+        setIsUploading(false)
+        return toast.error('Something went wrong!', {
+          description: dbError.message
+        })
+      }
+    }
+
+    setUploadProgress(90)
 
     const url = new URL(`${origin}/configure/design`)
     const searchParams = new URLSearchParams()
     searchParams.set('image', data.path)
+    searchParams.set('fileName', image.name)
     searchParams.set('width', '500')
     searchParams.set('height', '500')
 
     url.search = searchParams.toString()
+    setUploadProgress(100)
 
     startTransition(() => {
       router.push(url.toString())

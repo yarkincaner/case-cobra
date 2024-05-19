@@ -10,8 +10,12 @@ type Props = {
 }
 
 const Page: FC<Props> = async ({ searchParams }) => {
-  const { image, width, height } = searchParams
+  const { image, fileName, width, height } = searchParams
   if (!image || typeof image !== 'string') {
+    return notFound()
+  }
+
+  if (!fileName || typeof fileName !== 'string') {
     return notFound()
   }
 
@@ -28,6 +32,7 @@ const Page: FC<Props> = async ({ searchParams }) => {
         height: Number(height) || 500,
         width: Number(width) || 500
       }}
+      imageName={fileName}
     />
   )
 }

@@ -45,9 +45,14 @@ type Props = {
     width: number
     height: number
   }
+  imageName: string
 }
 
-const DesignConfigurator: FC<Props> = ({ imageUrl, imageDimensions }) => {
+const DesignConfigurator: FC<Props> = ({
+  imageUrl,
+  imageDimensions,
+  imageName
+}) => {
   const searchParams = useSearchParams()
   const [options, setOptions] = useState<OptionsType>({
     color: COLORS[0],
@@ -112,12 +117,32 @@ const DesignConfigurator: FC<Props> = ({ imageUrl, imageDimensions }) => {
       })
 
       const db = createClient()
+      const { data: user, error: authError } = await db.auth.getUser()
+
+      if (authError) {
+        // TODO: show sign-in page
+        throw new Error(authError.message)
+      }
+
       const { data, error } = await db.storage
         .from('case-photos')
-        .update(searchParams.get('image')!, file)
-
+        .upload(`${user.user.id}/configurated-${imageName}`, file)
       if (error) {
         throw new Error(error.message)
+      }
+
+      const {
+        data: { publicUrl }
+      } = await db.storage.from('case-photos').getPublicUrl(data.path)
+
+      const { error: dbError } = await db
+        .from('configuration')
+        .update({
+          croppedImageUrl: publicUrl
+        })
+        .eq('imageUrl', imageUrl)
+      if (dbError) {
+        throw new Error(dbError.message)
       }
     } catch (err) {
       toast.error('Something went wrong!', {
