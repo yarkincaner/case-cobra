@@ -126,7 +126,9 @@ const DesignConfigurator: FC<Props> = ({
 
       const { data, error } = await db.storage
         .from('case-photos')
-        .upload(`${user.user.id}/configurated-${imageName}`, file)
+        .upload(`${user.user.id}/configurated-${imageName}`, file, {
+          upsert: true
+        })
       if (error) {
         throw new Error(error.message)
       }

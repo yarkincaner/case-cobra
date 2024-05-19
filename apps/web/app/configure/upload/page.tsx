@@ -57,9 +57,11 @@ const Page: FC<Props> = ({}) => {
     } = await db.storage.from('case-photos').getPublicUrl(data.path)
     setUploadProgress(80)
 
+    let configId
+
     const { data: checkIfExist, error: checkIfExistError } = await db
       .from('configuration')
-      .select('imageUrl')
+      .select('id, imageUrl')
       .eq('imageUrl', publicUrl)
 
     if (checkIfExistError) {
@@ -69,11 +71,14 @@ const Page: FC<Props> = ({}) => {
     }
 
     if (!checkIfExist) {
-      const { error: dbError } = await db.from('configuration').insert({
-        height: 500,
-        width: 500,
-        imageUrl: publicUrl
-      })
+      const { data: insertData, error: dbError } = await db
+        .from('configuration')
+        .insert({
+          height: 500,
+          width: 500,
+          imageUrl: publicUrl
+        })
+        .select()
       if (dbError) {
         setUploadProgress(0)
         setIsUploading(false)
@@ -81,13 +86,16 @@ const Page: FC<Props> = ({}) => {
           description: dbError.message
         })
       }
+      configId = insertData[0].id
+    } else {
+      configId = checkIfExist[0].id
     }
 
     setUploadProgress(90)
 
     const url = new URL(`${origin}/configure/design`)
     const searchParams = new URLSearchParams()
-    searchParams.set('image', data.path)
+    searchParams.set('configId', configId.toString())
     searchParams.set('fileName', image.name)
     searchParams.set('width', '500')
     searchParams.set('height', '500')

@@ -10,8 +10,8 @@ type Props = {
 }
 
 const Page: FC<Props> = async ({ searchParams }) => {
-  const { image, fileName, width, height } = searchParams
-  if (!image || typeof image !== 'string') {
+  const { configId, fileName, width, height } = searchParams
+  if (!configId || typeof configId !== 'string') {
     return notFound()
   }
 
@@ -21,13 +21,18 @@ const Page: FC<Props> = async ({ searchParams }) => {
 
   const db = createClient()
 
-  const {
-    data: { publicUrl }
-  } = await db.storage.from('case-photos').getPublicUrl(image)
+  const { data, error } = await db
+    .from('configuration')
+    .select('imageUrl')
+    .eq('id', Number(configId))
+
+  if (error) {
+    throw new Error(error.message)
+  }
 
   return (
     <DesignConfigurator
-      imageUrl={publicUrl}
+      imageUrl={data[0].imageUrl}
       imageDimensions={{
         height: Number(height) || 500,
         width: Number(width) || 500
