@@ -17,7 +17,8 @@ import Icons from '@/components/ui/icons'
 import { Label } from '@/components/ui/label'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { BASE_PRICE } from '@/config/products'
-import { cn, formatPrice } from '@/lib/utils'
+import { createClient } from '@/lib/db/client'
+import { base64ToBlob, cn, formatPrice } from '@/lib/utils'
 import {
   COLORS,
   FINISHES,
@@ -25,9 +26,11 @@ import {
   MODELS
 } from '@/lib/validators/option-validator'
 import { RadioGroup } from '@headlessui/react'
-import Image from 'next/image'
-import { FC, useState } from 'react'
+import NextImage from 'next/image'
+import { useSearchParams } from 'next/navigation'
+import { FC, useRef, useState } from 'react'
 import { Rnd } from 'react-rnd'
+import { toast } from 'sonner'
 
 type OptionsType = {
   color: (typeof COLORS)[number]
@@ -45,6 +48,7 @@ type Props = {
 }
 
 const DesignConfigurator: FC<Props> = ({ imageUrl, imageDimensions }) => {
+  const searchParams = useSearchParams()
   const [options, setOptions] = useState<OptionsType>({
     color: COLORS[0],
     model: MODELS.options[0],
@@ -52,16 +56,90 @@ const DesignConfigurator: FC<Props> = ({ imageUrl, imageDimensions }) => {
     finish: FINISHES.options[0]
   })
 
+  const [renderedDimension, setRenderedDimension] = useState({
+    width: imageDimensions.width / 4,
+    height: imageDimensions.height / 4
+  })
+  const [renderedPosition, setRenderedPosition] = useState({
+    x: 250,
+    y: 250
+  })
+
+  const phoneCaseRef = useRef<HTMLDivElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  async function saveConfiguration() {
+    try {
+      const {
+        left: caseLeft,
+        top: caseTop,
+        width,
+        height
+      } = phoneCaseRef.current!.getBoundingClientRect()
+      const { left: containerLeft, top: containerTop } =
+        containerRef.current!.getBoundingClientRect()
+
+      const leftOffset = caseLeft - containerLeft
+      const topOffset = caseTop - containerTop
+
+      const actualX = renderedPosition.x - leftOffset
+      const actualY = renderedPosition.y - topOffset
+
+      const canvas = document.createElement('canvas')
+      canvas.width = width
+      canvas.height = height
+      const context = canvas.getContext('2d')
+
+      const userImage = new Image()
+      userImage.crossOrigin = 'anonymous'
+      userImage.src = imageUrl
+      await new Promise(resolve => (userImage.onload = resolve))
+
+      context?.drawImage(
+        userImage,
+        actualX,
+        actualY,
+        renderedDimension.width,
+        renderedDimension.height
+      )
+
+      const base64 = canvas.toDataURL()
+      const base64Data = base64.split(',')[1]
+
+      const blob = base64ToBlob(base64Data, 'image/png')
+      const file = new File([blob], 'configurated-image.png', {
+        type: 'image/png'
+      })
+
+      const db = createClient()
+      const { data, error } = await db.storage
+        .from('case-photos')
+        .update(searchParams.get('image')!, file)
+
+      if (error) {
+        throw new Error(error.message)
+      }
+    } catch (err) {
+      toast.error('Something went wrong!', {
+        description: 'There was a problem saving your config, please try again.'
+      })
+    }
+  }
+
   return (
     <div className='relative mb-20 mt-20 grid grid-cols-1 pb-20 lg:grid-cols-3'>
-      <div className='relative col-span-2 flex h-[37.5rem] w-full max-w-4xl items-center justify-center overflow-hidden rounded-lg border-2 border-dashed border-muted-foreground/30 p-12 text-center focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2'>
+      <div
+        ref={containerRef}
+        className='relative col-span-2 flex h-[37.5rem] w-full max-w-4xl items-center justify-center overflow-hidden rounded-lg border-2 border-dashed border-muted-foreground/30 p-12 text-center focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2'
+      >
         {/* aspect ratio 896/1831 comes from phone image ratio */}
         <div className='pointer-events-none relative aspect-[896/1831] w-60 bg-opacity-50'>
           <AspectRatio
+            ref={phoneCaseRef}
             ratio={896 / 1831}
             className='pointer-events-none relative z-50 aspect-[896/1831] w-full'
           >
-            <Image
+            <NextImage
               fill
               alt='phone image'
               src={'/phone-template.png'}
@@ -83,6 +161,18 @@ const DesignConfigurator: FC<Props> = ({ imageUrl, imageDimensions }) => {
             height: imageDimensions.height / 4,
             width: imageDimensions.width / 4
           }}
+          onResizeStop={(_, __, ref, ___, { x, y }) => {
+            setRenderedDimension({
+              // 50px -> 50 removes px from string
+              height: parseInt(ref.style.height.slice(0, -2)),
+              width: parseInt(ref.style.width.slice(0, -2))
+            })
+            setRenderedPosition({ x, y })
+          }}
+          onDragStop={(_, data) => {
+            const { x, y } = data
+            setRenderedPosition({ x, y })
+          }}
           className='absolute z-20 border-[3px] border-primary'
           lockAspectRatio
           resizeHandleComponent={{
@@ -93,7 +183,7 @@ const DesignConfigurator: FC<Props> = ({ imageUrl, imageDimensions }) => {
           }}
         >
           <div className='relative size-full'>
-            <Image
+            <NextImage
               src={imageUrl}
               fill
               alt='your image'
@@ -267,7 +357,11 @@ const DesignConfigurator: FC<Props> = ({ imageUrl, imageDimensions }) => {
                     100
                 )}
               </p>
-              <Button size={'sm'} className='w-full'>
+              <Button
+                size={'sm'}
+                className='w-full'
+                onClick={() => saveConfiguration()}
+              >
                 Continue <Icons.arrowRight className='ml-1.5 inline size-4' />
               </Button>
             </div>
