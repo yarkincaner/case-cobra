@@ -11,27 +11,39 @@ export type Database = {
     Tables: {
       configuration: {
         Row: {
+          color: Database["public"]["Enums"]["CaseColor"] | null
           created_at: string
           croppedImageUrl: string | null
+          finish: Database["public"]["Enums"]["CaseFinish"] | null
           height: number
           id: number
           imageUrl: string
+          material: Database["public"]["Enums"]["CaseMaterial"] | null
+          model: Database["public"]["Enums"]["PhoneModel"] | null
           width: number
         }
         Insert: {
+          color?: Database["public"]["Enums"]["CaseColor"] | null
           created_at?: string
           croppedImageUrl?: string | null
+          finish?: Database["public"]["Enums"]["CaseFinish"] | null
           height: number
           id?: number
           imageUrl: string
+          material?: Database["public"]["Enums"]["CaseMaterial"] | null
+          model?: Database["public"]["Enums"]["PhoneModel"] | null
           width: number
         }
         Update: {
+          color?: Database["public"]["Enums"]["CaseColor"] | null
           created_at?: string
           croppedImageUrl?: string | null
+          finish?: Database["public"]["Enums"]["CaseFinish"] | null
           height?: number
           id?: number
           imageUrl?: string
+          material?: Database["public"]["Enums"]["CaseMaterial"] | null
+          model?: Database["public"]["Enums"]["PhoneModel"] | null
           width?: number
         }
         Relationships: []
@@ -44,7 +56,17 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      CaseColor: "black" | "blue" | "rose"
+      CaseFinish: "smooth" | "textured"
+      CaseMaterial: "silicone" | "polycarbonate"
+      OrderStatus: "fulfilled" | "shipped" | "awaiting_shipment"
+      PhoneModel:
+        | "iphonex"
+        | "iphone11"
+        | "iphone12"
+        | "iphone13"
+        | "iphone14"
+        | "iphone15"
     }
     CompositeTypes: {
       [_ in never]: never
