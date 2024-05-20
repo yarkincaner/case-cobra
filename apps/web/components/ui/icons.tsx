@@ -2,11 +2,15 @@ import {
   ArrowLeft,
   ArrowRight,
   Check,
+  ChevronsUpDown,
+  Image,
   LayoutDashboard,
+  Loader2,
   LogOut,
   LucideProps,
   Monitor,
   Moon,
+  MousePointerSquareDashed,
   Star,
   Sun
 } from 'lucide-react'
@@ -21,6 +25,10 @@ const Icons = {
   lightMode: Sun,
   systemMode: Monitor,
   logout: LogOut,
+  loader: Loader2,
+  image: Image,
+  mousePointerSquareDashed: MousePointerSquareDashed,
+  upDown: ChevronsUpDown,
   google: (props: LucideProps) => (
     <svg {...props} viewBox='0 0 24 24'>
       <path

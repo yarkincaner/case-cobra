@@ -43,7 +43,7 @@ const Navbar: FC<Props> = async ({}) => {
                   href={'/configure/upload'}
                   className={buttonVariants({
                     size: 'sm',
-                    className: 'hidden items-center gap-1 sm:flex'
+                    className: 'hidden items-center sm:flex'
                   })}
                 >
                   Create case <Icons.arrowRight className='ml-1.5 size-4' />

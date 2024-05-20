@@ -1,19 +1,22 @@
+import { Database } from '@/types/supabase'
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 
 export const createClient = () => {
-  if (typeof process.env.SUPABASE_URL === 'undefined') {
-    throw new Error('Environment variable SUPABASE_URL is missing!')
+  if (typeof process.env.NEXT_PUBLIC_SUPABASE_URL === 'undefined') {
+    throw new Error('Environment variable NEXT_PUBLIC_SUPABASE_URL is missing!')
   }
-  if (typeof process.env.SUPABASE_ANON_KEY === 'undefined') {
-    throw new Error('Environment variable SUPABASE_ANON_KEY is missing!')
+  if (typeof process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY === 'undefined') {
+    throw new Error(
+      'Environment variable NEXT_PUBLIC_SUPABASE_ANON_KEY is missing!'
+    )
   }
 
   const cookieStore = cookies()
 
-  return createServerClient(
-    process.env.SUPABASE_URL,
-    process.env.SUPABASE_ANON_KEY,
+  return createServerClient<Database>(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     {
       cookies: {
         get(name: string) {

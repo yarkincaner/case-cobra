@@ -5,6 +5,7 @@ import Navbar from '@/components/Navbar'
 import { ThemeProvider } from '@/components/theme/theme-provider'
 import { Toaster } from '@/components/ui/sonner'
 import Footer from '@/components/Footer'
+import Providers from '@/components/Providers'
 
 const inter = Inter({ subsets: ['latin'] })
 const recursive = Recursive({ subsets: ['latin'] })
@@ -32,8 +33,12 @@ export default function RootLayout({
         >
           <Navbar />
           {authModal}
-          {children}
-          <Footer />
+          <main className='flex min-h-[calc(100vh-3.5rem-1px)] flex-col'>
+            <div className='flex h-full flex-1 flex-col'>
+              <Providers>{children}</Providers>
+            </div>
+            <Footer />
+          </main>
           <Toaster richColors />
         </ThemeProvider>
       </body>
