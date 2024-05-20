@@ -26,7 +26,7 @@ const Navbar: FC<Props> = async ({}) => {
           </Link>
           <div className='flex h-full items-center space-x-4'>
             {user ? (
-              <>
+              <div className='flex items-center sm:space-x-2'>
                 <Logout />
                 {isAdmin ? (
                   <Link
@@ -39,40 +39,29 @@ const Navbar: FC<Props> = async ({}) => {
                     Dashboard <Icons.dashboard className='ml-1.5 size-4' />
                   </Link>
                 ) : null}
-                <Link
-                  href={'/configure/upload'}
-                  className={buttonVariants({
-                    size: 'sm',
-                    className: 'hidden items-center sm:flex'
-                  })}
-                >
-                  Create case <Icons.arrowRight className='ml-1.5 size-4' />
-                </Link>
-              </>
+              </div>
             ) : (
-              <>
-                <Link
-                  href={'/sign-in'}
-                  className={buttonVariants({
-                    size: 'sm',
-                    variant: 'ghost'
-                  })}
-                  scroll={false}
-                >
-                  Login
-                </Link>
-                <div className='hidden h-8 w-px bg-secondary sm:block' />
-                <Link
-                  href={'/configure/upload'}
-                  className={buttonVariants({
-                    size: 'sm',
-                    className: 'hidden items-center gap-1 sm:flex'
-                  })}
-                >
-                  Create case <Icons.arrowRight className='ml-1.5 size-4' />
-                </Link>
-              </>
+              <Link
+                href={'/sign-in'}
+                className={buttonVariants({
+                  size: 'sm',
+                  variant: 'ghost'
+                })}
+                scroll={false}
+              >
+                Login
+              </Link>
             )}
+            <div className='hidden h-8 w-px bg-muted sm:block' />
+            <Link
+              href={'/configure/upload'}
+              className={buttonVariants({
+                size: 'sm',
+                className: 'hidden items-center gap-1 sm:flex'
+              })}
+            >
+              Create case <Icons.arrowRight className='ml-1.5 size-4' />
+            </Link>
           </div>
         </div>
       </MaxWidthWrapper>

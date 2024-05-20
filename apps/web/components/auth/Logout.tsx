@@ -10,7 +10,7 @@ import { toast } from 'sonner'
 type Props = {}
 
 const Logout: FC<Props> = () => {
-  const { replace } = useRouter()
+  const { push } = useRouter()
   const handleSignOut = async () => {
     toast.promise(signOut, {
       loading: 'Loading...',
@@ -18,7 +18,7 @@ const Logout: FC<Props> = () => {
         return error
       },
       success: data => {
-        replace('/')
+        push('/')
         return data.success
       }
     })

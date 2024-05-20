@@ -34,7 +34,7 @@ const LoginDialog: FC<Props> = ({}) => {
             Log in to continue
           </DialogTitle>
           <DialogDescription className='py-2 text-center text-base'>
-            <p>Login to start creating your dream phone case.</p>
+            Login to start creating your dream phone case.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
