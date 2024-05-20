@@ -9,6 +9,42 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      BillingAddress: {
+        Row: {
+          city: string
+          country: string
+          created_at: string
+          id: number
+          name: string
+          phoneNumber: string | null
+          postalCode: string
+          state: string | null
+          street: string
+        }
+        Insert: {
+          city: string
+          country: string
+          created_at?: string
+          id?: number
+          name: string
+          phoneNumber?: string | null
+          postalCode: string
+          state?: string | null
+          street: string
+        }
+        Update: {
+          city?: string
+          country?: string
+          created_at?: string
+          id?: number
+          name?: string
+          phoneNumber?: string | null
+          postalCode?: string
+          state?: string | null
+          street?: string
+        }
+        Relationships: []
+      }
       configuration: {
         Row: {
           color: Database["public"]["Enums"]["CaseColor"] | null
@@ -45,6 +81,107 @@ export type Database = {
           material?: Database["public"]["Enums"]["CaseMaterial"] | null
           model?: Database["public"]["Enums"]["PhoneModel"] | null
           width?: number
+        }
+        Relationships: []
+      }
+      Order: {
+        Row: {
+          amount: number
+          billingAddress: number | null
+          configuration: number
+          created_at: string
+          id: number
+          isPaid: boolean
+          shippingAddress: number | null
+          status: Database["public"]["Enums"]["OrderStatus"]
+          user: string
+        }
+        Insert: {
+          amount: number
+          billingAddress?: number | null
+          configuration: number
+          created_at?: string
+          id?: number
+          isPaid?: boolean
+          shippingAddress?: number | null
+          status: Database["public"]["Enums"]["OrderStatus"]
+          user: string
+        }
+        Update: {
+          amount?: number
+          billingAddress?: number | null
+          configuration?: number
+          created_at?: string
+          id?: number
+          isPaid?: boolean
+          shippingAddress?: number | null
+          status?: Database["public"]["Enums"]["OrderStatus"]
+          user?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "Order_billingAddress_fkey"
+            columns: ["billingAddress"]
+            isOneToOne: false
+            referencedRelation: "BillingAddress"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "Order_configuration_fkey"
+            columns: ["configuration"]
+            isOneToOne: false
+            referencedRelation: "configuration"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "Order_shippingAddress_fkey"
+            columns: ["shippingAddress"]
+            isOneToOne: false
+            referencedRelation: "ShippingAddress"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "Order_user_fkey"
+            columns: ["user"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ShippingAddress: {
+        Row: {
+          city: string
+          country: string
+          created_at: string
+          id: number
+          name: string
+          phoneNumber: string | null
+          postalCode: string
+          state: string | null
+          street: string
+        }
+        Insert: {
+          city: string
+          country: string
+          created_at?: string
+          id?: number
+          name: string
+          phoneNumber?: string | null
+          postalCode: string
+          state?: string | null
+          street: string
+        }
+        Update: {
+          city?: string
+          country?: string
+          created_at?: string
+          id?: number
+          name?: string
+          phoneNumber?: string | null
+          postalCode?: string
+          state?: string | null
+          street?: string
         }
         Relationships: []
       }
