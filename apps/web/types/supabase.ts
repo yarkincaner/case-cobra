@@ -104,7 +104,7 @@ export type Database = {
           id?: number
           isPaid?: boolean
           shippingAddress?: number | null
-          status: Database["public"]["Enums"]["OrderStatus"]
+          status?: Database["public"]["Enums"]["OrderStatus"]
           user: string
         }
         Update: {
