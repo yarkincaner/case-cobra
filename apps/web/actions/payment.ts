@@ -105,3 +105,34 @@ export const createCheckoutSession = async ({
 
   return { url: stripeSession.url }
 }
+
+export const getPaymentStatus = async ({ orderId }: { orderId: number }) => {
+  const {
+    data: { user },
+    error: authError
+  } = await db.auth.getUser()
+
+  if (authError || !user) {
+    throw new Error('You need to be logged in to view this page!')
+  }
+
+  const { data: order, error: orderError } = await db
+    .from('Order')
+    .select('*, configuration(*), BillingAddress(*), ShippingAddress(*)')
+    .eq('id', orderId)
+    .maybeSingle()
+
+  if (orderError) {
+    throw new Error(orderError.message)
+  }
+
+  if (!order) {
+    throw new Error('This order does not exist!')
+  }
+
+  if (order.isPaid === false) {
+    return false
+  }
+
+  return order
+}

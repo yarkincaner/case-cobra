@@ -58,8 +58,6 @@ export async function POST(req: NextRequest) {
           state: shippingAddress!.state
         })
         .select('id')
-        .limit(1)
-        .single()
 
       if (shippingAddressError) {
         throw new Error(shippingAddressError.message)
@@ -76,8 +74,6 @@ export async function POST(req: NextRequest) {
           state: billingAddress!.state
         })
         .select('id')
-        .limit(1)
-        .single()
 
       if (billingAddressError) {
         throw new Error(billingAddressError.message)
@@ -87,8 +83,8 @@ export async function POST(req: NextRequest) {
         .from('Order')
         .update({
           isPaid: true,
-          shippingAddress: db_shippingAddress.id,
-          billingAddress: db_billingAddress.id
+          shippingAddress: db_shippingAddress[0].id,
+          billingAddress: db_billingAddress[0].id
         })
         .eq('id', orderId)
 

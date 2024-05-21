@@ -3,7 +3,13 @@
 import { FC, ReactNode } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
-const client = new QueryClient()
+const client = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false
+    }
+  }
+})
 
 type Props = {
   children: ReactNode
