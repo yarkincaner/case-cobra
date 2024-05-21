@@ -24,14 +24,18 @@ const Page: FC<Props> = ({}) => {
     if (userError) {
       setUploadProgress(0)
       setIsUploading(false)
-      return router.replace('/sign-in')
+      return router.push('/sign-in', {
+        scroll: false
+      })
     }
     setUploadProgress(10)
 
     if (!userData.user) {
       setUploadProgress(0)
       setIsUploading(false)
-      return router.replace('/sign-in')
+      return router.push('/sign-in', {
+        scroll: false
+      })
     }
     setUploadProgress(20)
 
