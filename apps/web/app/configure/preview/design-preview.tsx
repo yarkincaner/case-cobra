@@ -1,6 +1,6 @@
 'use client'
 
-import { createCheckoutSession } from '@/actions/checkout'
+import { createCheckoutSession } from '@/actions/payment'
 import Phone from '@/components/Phone'
 import { Button } from '@/components/ui/buttons/button'
 import Icons from '@/components/ui/icons'
