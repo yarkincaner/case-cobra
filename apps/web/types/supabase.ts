@@ -147,6 +147,13 @@ export type Database = {
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "Order_user_fkey1"
+            columns: ["user"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
         ]
       }
       ShippingAddress: {
@@ -185,12 +192,46 @@ export type Database = {
         }
         Relationships: []
       }
+      users: {
+        Row: {
+          email: string | null
+          email_verified: boolean | null
+          full_name: string | null
+          id: string
+        }
+        Insert: {
+          email?: string | null
+          email_verified?: boolean | null
+          full_name?: string | null
+          id: string
+        }
+        Update: {
+          email?: string | null
+          email_verified?: boolean | null
+          full_name?: string | null
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "users_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      sum_of_amounts_by_date: {
+        Args: {
+          from_date: string
+        }
+        Returns: number
+      }
     }
     Enums: {
       CaseColor: "black" | "blue" | "rose"
