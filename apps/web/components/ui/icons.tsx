@@ -8,6 +8,7 @@ import {
   Loader2,
   LogOut,
   LucideProps,
+  Menu,
   Monitor,
   Moon,
   MousePointerSquareDashed,
@@ -29,6 +30,7 @@ const Icons = {
   image: Image,
   mousePointerSquareDashed: MousePointerSquareDashed,
   upDown: ChevronsUpDown,
+  menu: Menu,
   google: (props: LucideProps) => (
     <svg {...props} viewBox='0 0 24 24'>
       <path

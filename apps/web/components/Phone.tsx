@@ -1,12 +1,28 @@
+'use client'
+
 import { cn } from '@/lib/utils'
+import { useTheme } from 'next-themes'
 import { FC, HTMLAttributes } from 'react'
 
 type Props = {
   imgSrc: string
-  dark?: boolean
 } & HTMLAttributes<HTMLDivElement>
 
-const Phone: FC<Props> = ({ className, imgSrc, dark = false, ...props }) => {
+const Phone: FC<Props> = ({ className, imgSrc, ...props }) => {
+  const { resolvedTheme } = useTheme()
+  let src
+
+  switch (resolvedTheme) {
+    case 'light':
+      src = '/phone-template-white-edges.png'
+      break
+    case 'dark':
+      src = '/phone-template-dark-edges.png'
+    default:
+      src = '/phone-template-dark-edges.png'
+      break
+  }
+
   return (
     <div
       className={cn(
@@ -16,14 +32,14 @@ const Phone: FC<Props> = ({ className, imgSrc, dark = false, ...props }) => {
       {...props}
     >
       <img
-        src={'/phone-template.png'}
+        src={src}
         className='pointer-events-none z-40 select-none'
         alt='phone image'
       />
       <div className='absolute inset-0 -z-10'>
         <img
           src={imgSrc}
-          className='min-h-full min-w-full rounded-[4.1rem] object-cover p-[0.1rem] sm:rounded-[1.8rem] md:rounded-2xl lg:rounded-3xl xl:rounded-[2rem]'
+          className='min-h-full min-w-full object-cover'
           alt='overlaying phone image'
         />
       </div>
