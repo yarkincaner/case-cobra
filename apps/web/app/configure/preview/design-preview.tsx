@@ -66,10 +66,7 @@ const DesignPreview: FC<Props> = ({ configuration }) => {
       <div className='md:col-span-4 md:row-span-2 md:row-end-2 lg:col-span-3'>
         <Phone
           imgSrc={croppedImageUrl!}
-          className={cn(
-            `bg-${tw}`,
-            'max-w-[150px] rounded-[1rem] sm:rounded-[1rem] md:max-w-full md:rounded-[2.1rem] lg:rounded-[2.2rem] xl:rounded-[2.5rem]'
-          )}
+          className={cn(`bg-${tw}`, 'max-w-[150px] md:max-w-full')}
         />
       </div>
       <div className='mt-6 sm:col-span-9 md:row-end-1'>

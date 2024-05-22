@@ -1,6 +1,5 @@
 'use client'
 
-import * as React from 'react'
 import { useTheme } from 'next-themes'
 
 import { Button } from '@/components/ui/buttons/button'
@@ -13,12 +12,21 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import Icons from '@/components/ui/icons'
-import { FC } from 'react'
+import { FC, useEffect, useState } from 'react'
 
 type Props = {}
 
 const ThemeSwitcher: FC<Props> = ({}) => {
+  const [mounted, setMounted] = useState<boolean>(false)
   const { theme, setTheme } = useTheme()
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) {
+    return null
+  }
 
   return (
     <DropdownMenu>
@@ -32,9 +40,15 @@ const ThemeSwitcher: FC<Props> = ({}) => {
       <DropdownMenuContent align='end'>
         <DropdownMenuLabel>Theme</DropdownMenuLabel>
         <DropdownMenuRadioGroup value={theme} onValueChange={setTheme}>
-          <DropdownMenuRadioItem value='light'>Light</DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value='dark'>Dark</DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value='system'>System</DropdownMenuRadioItem>
+          <DropdownMenuRadioItem value='light'>
+            <Icons.lightMode className='mr-1.5 size-4' /> Light
+          </DropdownMenuRadioItem>
+          <DropdownMenuRadioItem value='dark'>
+            <Icons.darkMode className='mr-1.5 size-4' /> Dark
+          </DropdownMenuRadioItem>
+          <DropdownMenuRadioItem value='system'>
+            <Icons.systemMode className='mr-1.5 size-4' /> System
+          </DropdownMenuRadioItem>
         </DropdownMenuRadioGroup>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -27,7 +27,7 @@ const Logout: FC<Props> = () => {
   return (
     <form action={handleSignOut}>
       <Button type='submit' variant={'ghost'} size={'sm'}>
-        Sign out
+        <span className='hidden sm:block'>Sign out</span>
         <Icons.logout className='ml-1.5 size-4' />
       </Button>
     </form>
