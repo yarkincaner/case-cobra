@@ -3,6 +3,7 @@ import {
   ArrowRight,
   Check,
   ChevronsUpDown,
+  Github,
   Image,
   LayoutDashboard,
   Loader2,
@@ -31,6 +32,7 @@ const Icons = {
   mousePointerSquareDashed: MousePointerSquareDashed,
   upDown: ChevronsUpDown,
   menu: Menu,
+  github: Github,
   google: (props: LucideProps) => (
     <svg {...props} viewBox='0 0 24 24'>
       <path
