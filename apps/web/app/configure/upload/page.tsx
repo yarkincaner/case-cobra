@@ -74,7 +74,7 @@ const Page: FC<Props> = ({}) => {
       })
     }
 
-    if (!checkIfExist) {
+    if (checkIfExist.length < 1) {
       const { data: insertData, error: dbError } = await db
         .from('configuration')
         .insert({
