@@ -1,6 +1,9 @@
+'use client'
+
 import Icons from '@/components/ui/icons'
 import Typography from '@/components/ui/typography'
 import Phone from '@/components/Phone'
+import { useTheme } from 'next-themes'
 
 const prosItems = [
   {
@@ -38,6 +41,20 @@ const users = [
 ]
 
 const Hero = () => {
+  const { resolvedTheme } = useTheme()
+  let yourImageSrc
+
+  switch (resolvedTheme) {
+    case 'light':
+      yourImageSrc = '/your-image.png'
+      break
+    case 'dark':
+      yourImageSrc = '/your-image-dark.png'
+    default:
+      yourImageSrc = '/your-image-dark.png'
+      break
+  }
+
   return (
     <>
       <div className='col-span-2 px-6 lg:px-0 lg:pt-4'>
@@ -102,7 +119,7 @@ const Hero = () => {
       <div className='col-span-full mt-32 flex h-fit w-full justify-center px-8 sm:px-16 md:px-0 lg:col-span-1 lg:mx-0 lg:mt-20'>
         <div className='max-w-xl md:relative'>
           <img
-            src='/your-image.png'
+            src={yourImageSrc}
             className='absolute -top-20 left-56 hidden w-40 select-none sm:block lg:hidden lg:w-52 xl:block'
           />
           <img

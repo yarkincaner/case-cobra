@@ -5,6 +5,7 @@ import MaxWidthWrapper from '@/components/MaxWidthWrapper'
 import { useInView } from 'framer-motion'
 import { cn, splitArray } from '@/lib/utils'
 import Phone from '@/components/Phone'
+import { useTheme } from 'next-themes'
 
 function ReviewColumn({
   reviews,
@@ -141,11 +142,24 @@ function ReviewGrid() {
 }
 
 export function Reviews() {
+  const { resolvedTheme } = useTheme()
+  let whatPeopleAreBuyingSrc
+
+  switch (resolvedTheme) {
+    case 'light':
+      whatPeopleAreBuyingSrc = '/what-people-are-buying.png'
+      break
+    case 'dark':
+      whatPeopleAreBuyingSrc = '/what-people-are-buying-dark.png'
+    default:
+      whatPeopleAreBuyingSrc = '/what-people-are-buying-dark.png'
+      break
+  }
   return (
     <MaxWidthWrapper className='relative max-w-5xl'>
       <img
         aria-hidden='true'
-        src='/what-people-are-buying.png'
+        src={whatPeopleAreBuyingSrc}
         className='absolute -left-32 top-1/3 hidden select-none xl:block'
       />
       <ReviewGrid />
