@@ -22,12 +22,7 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body className={recursive.className}>
-        <ThemeProvider
-          attribute='class'
-          defaultTheme='system'
-          enableSystem
-          disableTransitionOnChange
-        >
+        <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
           <Navbar />
           {authModal}
           <main className='flex min-h-[calc(100vh-3.5rem-1px)] flex-col'>

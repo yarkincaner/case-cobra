@@ -12,21 +12,12 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import Icons from '@/components/ui/icons'
-import { FC, useEffect, useState } from 'react'
+import { FC } from 'react'
 
 type Props = {}
 
 const ThemeSwitcher: FC<Props> = ({}) => {
-  const [mounted, setMounted] = useState<boolean>(false)
   const { theme, setTheme } = useTheme()
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  if (!mounted) {
-    return null
-  }
 
   return (
     <DropdownMenu>
