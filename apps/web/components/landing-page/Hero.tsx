@@ -51,7 +51,8 @@ const Hero = () => {
     case 'dark':
       yourImageSrc = '/your-image-dark.png'
     default:
-      yourImageSrc = '/your-image-dark.png'
+      yourImageSrc =
+        'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
       break
   }
 
