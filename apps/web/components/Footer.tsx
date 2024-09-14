@@ -25,7 +25,7 @@ const Footer: FC<Props> = ({}) => {
           <div className='flex items-center justify-center'>
             <div className='flex space-x-8 text-sm'>
               <Link
-                href={'#'}
+                href={'https://github.com/yarkincaner/case-cobra'}
                 className='text-muted-foreground hover:text-foreground'
               >
                 Terms
