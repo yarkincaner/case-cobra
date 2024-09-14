@@ -16,7 +16,7 @@ const Footer: FC<Props> = ({}) => {
               &copy; {new Date().getFullYear()} All rights reserved
             </p>
             <Link
-              href={'#'}
+              href={'https://github.com/yarkincaner/case-cobra'}
               className='flex items-center text-muted-foreground hover:text-foreground'
             >
               <Icons.github className='mr-1.5 size-4' /> Source code
@@ -25,7 +25,7 @@ const Footer: FC<Props> = ({}) => {
           <div className='flex items-center justify-center'>
             <div className='flex space-x-8 text-sm'>
               <Link
-                href={'https://github.com/yarkincaner/case-cobra'}
+                href={'#'}
                 className='text-muted-foreground hover:text-foreground'
               >
                 Terms
